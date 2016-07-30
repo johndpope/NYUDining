@@ -20,7 +20,7 @@ class RFHoursTableViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        hoursTable.registerClass(HoursTableViewCell.self, forCellReuseIdentifier: cellId)
+        hoursTable.register(HoursTableViewCell.self, forCellReuseIdentifier: cellId)
         hoursTable.dataSource = self
         
         view.addSubview(hoursTable)
@@ -45,11 +45,11 @@ class RFHoursTableViewController: UIViewController {
 }
 
 extension RFHoursTableViewController: UITableViewDataSource {
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let hours = diningLocation.hours {
             return hours.count
         }
@@ -57,14 +57,14 @@ extension RFHoursTableViewController: UITableViewDataSource {
         return 0
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath: indexPath) as! HoursTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! HoursTableViewCell
         
-        var hours = diningLocation.hours[indexPath.row]
+        var hours = diningLocation.hours[(indexPath as NSIndexPath).row]
         
         var dayOfWeek: DayOfWeek
         
-        switch indexPath.row {
+        switch (indexPath as NSIndexPath).row {
         case 0:
             dayOfWeek = .Sunday
         case 1:
@@ -83,7 +83,7 @@ extension RFHoursTableViewController: UITableViewDataSource {
         
         cell.weekdayLabel.text = dayOfWeek.rawValue
         
-        hours = hours.stringByReplacingOccurrencesOfString(",", withString: "\n")
+        hours = hours.replacingOccurrences(of: ",", with: "\n")
         cell.hoursLabel.text = hours
         
         
